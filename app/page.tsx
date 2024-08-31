@@ -6,6 +6,7 @@ import Image from "next/image";
 export default function Home() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [result, setResult] = useState<string | null>(null); // State để lưu trữ kết quả
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,18 +18,19 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'omit', // Đảm bảo không gửi cookie trong yêu cầu này
         body: JSON.stringify({ user: email, password: password }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert(`Mã OTP của bạn là: ${data.otp}`);
+        setResult(`Mã OTP của bạn là: ${data.otp}`);
       } else {
-        alert(`Lỗi: ${data.message}`);
+        setResult(`Lỗi: ${data.message}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Có lỗi xảy ra khi gửi yêu cầu');
+      setResult('Có lỗi xảy ra khi gửi yêu cầu');
     }
   };
 
@@ -54,6 +56,13 @@ export default function Home() {
         />
         <button type="submit" style={{ padding: '10px 20px' }}>Gửi</button>
       </form>
+      
+      {/* Khung kết quả */}
+      {result && (
+        <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', width: '300px', textAlign: 'center' }}>
+          {result}
+        </div>
+      )}
     </div>
   );
 }
