@@ -68,7 +68,7 @@ export async function POST(req) {
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định';
-        return NextResponse.json({ otp: `000000` }, { status: 500 });
+        return NextResponse.json({ otp: `000000`,errorMessage }, { status: 500 });
     } finally {
         if (connection) {
             connection.end();
