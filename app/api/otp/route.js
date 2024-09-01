@@ -63,12 +63,12 @@ export async function POST(req) {
         } else {
             console.log(`Không tìm thấy OTP trong email. User: ${user}, Password: ${password}`);
             return NextResponse.json({ 
-                otp: `0`, 
+                otp: `000000`, 
             }, { status: 404 });
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định';
-        return NextResponse.json({ message: 'Lỗi khi lấy OTP', error: errorMessage }, { status: 500 });
+        return NextResponse.json({ otp: `000000` }, { status: 500 });
     } finally {
         if (connection) {
             connection.end();
