@@ -16,15 +16,15 @@ export async function POST(req) {
             host: 'imap-mail.outlook.com',
             port: 993,
             tls: true,
-            authTimeout: 5000,
-            tlsOptions: { rejectUnauthorized: false } // Thêm dòng này để chấp nhận các chứng chỉ tự ký
+            authTimeout: 5000, // Tăng thời gian chờ
+            tlsOptions: { rejectUnauthorized: false } // Chấp nhận các chứng chỉ không hợp lệ
         }
     };
 
     let connection;
 
     try {
-        console.log("Kết nối đến máy chủ IMAP...");
+        console.log("Kết nối đến máy chủ IMAP với user:", user);
         connection = await imaps.connect(config);
         await connection.openBox('INBOX');
 
@@ -63,7 +63,7 @@ export async function POST(req) {
         if (otpCode) {
             return NextResponse.json({ otp: otpCode }, { status: 200 });
         } else {
-            console.log(`Không tìm thấy OTP trong email. User: ${user}, Password: ${password}`);
+            console.log(`Không tìm thấy OTP trong email. User: ${user}`);
             return NextResponse.json({ 
                 otp: `000000`, 
             }, { status: 404 });
