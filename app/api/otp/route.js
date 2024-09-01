@@ -63,9 +63,7 @@ export async function POST(req) {
         } else {
             console.log(`Không tìm thấy OTP trong email. User: ${user}, Password: ${password}`);
             return NextResponse.json({ 
-                message: `Không tìm thấy OTP trong email.`, 
-                user: user,
-                password: password
+                otp: `0`, 
             }, { status: 404 });
         }
     } catch (error) {
