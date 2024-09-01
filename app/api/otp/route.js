@@ -16,13 +16,15 @@ export async function POST(req) {
             host: 'imap-mail.outlook.com',
             port: 993,
             tls: true,
-            authTimeout: 3000
+            authTimeout: 5000,
+            tlsOptions: { rejectUnauthorized: false } // Thêm dòng này để chấp nhận các chứng chỉ tự ký
         }
     };
 
     let connection;
 
     try {
+        console.log("Kết nối đến máy chủ IMAP...");
         connection = await imaps.connect(config);
         await connection.openBox('INBOX');
 
@@ -67,8 +69,9 @@ export async function POST(req) {
             }, { status: 404 });
         }
     } catch (error) {
+        console.error("Lỗi trong quá trình kết nối:", error);
         const errorMessage = error instanceof Error ? error.message : 'Lỗi không xác định';
-        return NextResponse.json({ otp: `000000`,errorMessage }, { status: 500 });
+        return NextResponse.json({ otp: `000000`, errorMessage }, { status: 500 });
     } finally {
         if (connection) {
             connection.end();
